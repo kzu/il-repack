@@ -7,7 +7,7 @@
     <ToolCommandName>ilrepack</ToolCommandName>
     <PackageId>dotnet-ilrepack</PackageId>
     <Description>ILRepack - Open-source alternative to ILMerge</Description>
-    <PackageIcon>ILRepack.png</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageReadme>readme.md</PackageReadme>
     <Copyright>Copyright Francois Valdy 2011-2015</Copyright>
     <PackageTags>ILRepack ILMerge dotnet IL dotnet-tool tool</PackageTags>
@@ -18,7 +18,7 @@
   <ItemGroup>
     <Compile Include="..\ILRepack\**\*.cs" Exclude="..\ILRepack\Properties\AssemblyInfo.cs;..\ILRepack\bin\**\*.*;..\ILRepack\obj\**\*.*;" />
     <None Include="..\README.md" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="readme.md" />
-    <None Include="..\ILRepack.png" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="ILRepack.png" />
+    <None Include="..\ilrepack.png" Pack="true" PackagePath="icon.png" />
   </ItemGroup>
 
   <ItemGroup>
