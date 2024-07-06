@@ -20,6 +20,7 @@ env:
   Configuration: Release
   PackageOutputPath: ${{ github.workspace }}/bin
   GeneratePackageOnBuild: true
+  VersionPrefix: 42.42.${{ github.run_number }}
   VersionLabel: ${{ github.ref }}
 
 defaults:
@@ -28,11 +29,7 @@ defaults:
 
 jobs:
   build:
-    name: build-${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ "ubuntu-latest", "macOS-latest", "windows-latest" ]
+    runs-on: "windows-latest"
     steps:
       - name: 🤘 checkout
         uses: actions/checkout@v4
@@ -42,21 +39,26 @@ jobs:
 
       - name: 🙏 build
         run: dotnet build
-        working-directory: ILRepackTool
 
       - name: ⚙ install
         run: dotnet tool install -g dotnet-ilrepack --add-source ./bin
 
       - name: 🧪 test
-        run: 
-            ilrepack /help 
-            if [ $? -eq 2 ]; then
-                echo "Done"
-            else
-                exit 1
-            fi        
+        run: dotnet test --no-build -l trx
 
-      # Only push CI package to sleet feed if building on ubuntu (fastest)
+      - name: 🗎 trx
+        if: always()
+        run: |
+            dotnet tool install -g dotnet-trx
+            trx
+
+      - name: ⬆️ upload
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pkg
+          path: bin/*   
+
       - name: 🚀 sleet
         env:
           SLEET_CONNECTION: ${{ secrets.SLEET_CONNECTION }}
@@ -64,3 +66,33 @@ jobs:
         run: |
           dotnet tool install -g --version 4.0.18 sleet 
           sleet push bin --config none -f --verbose -p "SLEET_FEED_CONTAINER=nuget" -p "SLEET_FEED_CONNECTIONSTRING=${{ secrets.SLEET_CONNECTION }}" -p "SLEET_FEED_TYPE=azure" || echo "No packages found"
+  
+  test:
+    name: test-${{ matrix.os }}
+    needs: build
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: pwsh
+    strategy:
+      matrix:
+        os: [ 'windows-latest', 'ubuntu-latest', 'macOS-latest' ]
+    steps:
+      - name: ⬇️ artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: pkg
+          path: bin
+
+      - name: ⚙ install
+        working-directory: bin
+        run: dotnet tool update -g dotnet-ilrepack --prerelease --add-source .
+
+      - name: 🧪 run
+        run: 
+            ilrepack /help 
+            if [ $? -eq 2 ]; then
+                echo "Done"
+            else
+                exit 1
+            fi        
