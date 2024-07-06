@@ -45,7 +45,7 @@ jobs:
         working-directory: ILRepackTool
 
       - name: ⚙ install
-        run: dotnet tool install -g dotnet-ilrepack --add-source bin
+        run: dotnet tool install -g dotnet-ilrepack --add-source ./bin
 
       - name: 🧪 test
         run: 
