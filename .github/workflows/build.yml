@@ -84,9 +84,6 @@ jobs:
     name: test-${{ matrix.os }}
     needs: build
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: pwsh
     strategy:
       matrix:
         os: [ 'windows-latest', 'ubuntu-latest', 'macOS-latest' ]
@@ -102,10 +99,10 @@ jobs:
         run: dotnet tool update -g dotnet-ilrepack --prerelease --add-source .
 
       - name: 🧪 run
-        run: 
-            ilrepack /help 
-            if [ $? -eq 2 ]; then
-                echo "Done"
-            else
-                exit 1
-            fi        
+        run: |
+          ilrepack /help
+          if [ $? -eq 2 ]; then
+              echo "Done"
+          else
+              exit 1
+          fi
