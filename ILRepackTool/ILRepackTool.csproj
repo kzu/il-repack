@@ -36,5 +36,4 @@
     <EmbeddedResource Include="$(PkgSourceLink)\tools\pdbstr.exe" />
   </ItemGroup>
 
-
 </Project>
