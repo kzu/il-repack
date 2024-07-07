@@ -26,6 +26,7 @@
     <ProjectReference Include="..\cecil\symbols\mdb\Mono.Cecil.Mdb.csproj" />
     <ProjectReference Include="..\cecil\symbols\pdb\Mono.Cecil.Pdb.csproj" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="BamlParser" Version="1.0.1" />
     <PackageReference Include="fasterflect" Version="3.0.0" />
@@ -33,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="$(PkgSourceLink)\tools\pdbstr.exe" />
+    <EmbeddedResource Include="$(PkgSourceLink)\tools\pdbstr.exe" LogicalName="ILRepacking.pdbstr.exe" />
   </ItemGroup>
 
 </Project>
