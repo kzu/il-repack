@@ -55,9 +55,6 @@ jobs:
       - name: 📦 pack
         run: dotnet pack --no-build ILRepackTool/ILRepackTool.csproj
 
-      - name: ⚙ install
-        run: dotnet tool install -g dotnet-ilrepack --prerelease --add-source ./bin
-
       - name: ⬆️ upload
         if: success()
         uses: actions/upload-artifact@v3
